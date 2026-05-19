@@ -107,7 +107,7 @@ export default function Login({
                                 ) : (
                                     <LogIn className="mr-2 h-4 w-4" />
                                 )}
-                                Se connecter à Goldery
+                                Se connecter à Si3ri
                             </Button>
                         </div>
 

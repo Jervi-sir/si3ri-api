@@ -14,7 +14,7 @@ export default function Register() {
     return (
         <AuthLayout
             title="Créez votre compte"
-            description="Rejoignez Goldery pour commencer à suivre les cours du marché aujourd'hui"
+            description="Rejoignez Si3ri pour commencer à suivre les cours du marché aujourd'hui"
         >
             <Head title="S'inscrire" />
             <Form

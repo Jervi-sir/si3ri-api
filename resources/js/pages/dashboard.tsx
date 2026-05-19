@@ -103,7 +103,7 @@ export default function Dashboard({ data, isSubscribed }: DashboardProps) {
                                 Accès Premium requis
                             </CardTitle>
                             <CardDescription>
-                                Abonnez-vous à Goldery pour accéder aux prix du marché en temps réel,
+                                Abonnez-vous à Si3ri pour accéder aux prix du marché en temps réel,
                                 aux taux de change et au calculateur professionnel.
                             </CardDescription>
                         </CardHeader>

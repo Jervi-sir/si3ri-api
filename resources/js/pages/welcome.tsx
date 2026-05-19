@@ -15,7 +15,7 @@ export default function Welcome({
 
     return (
         <div className="flex min-h-screen flex-col bg-white text-[#1b1b18] dark:bg-[#050505] dark:text-[#EDEDEC]">
-            <Head title="Goldery | Intelligence de l'Or en temps réel" />
+            <Head title="Si3ri | Intelligence de l'Or en temps réel" />
 
             <nav className="container mx-auto flex h-20 items-center justify-between px-6">
                 <Link href="/" className="flex items-center gap-2.5">
@@ -23,7 +23,7 @@ export default function Welcome({
                         <AppLogoIcon className="size-5 fill-current" />
                     </div>
                     <span className="text-xl font-black tracking-tighter uppercase">
-                        Goldery
+                        Si3ri
                     </span>
                 </Link>
 
@@ -114,7 +114,7 @@ export default function Welcome({
             </main>
 
             <footer className="container mx-auto flex h-20 items-center justify-between border-t border-neutral-100 px-6 text-[10px] font-bold tracking-widest text-neutral-400 uppercase dark:border-neutral-900">
-                <span>© {new Date().getFullYear()} Goldery Market Data</span>
+                <span>© {new Date().getFullYear()} Si3ri Market Data</span>
                 <div className="flex gap-6">
                     <Link href="#" className="hover:text-amber-500">
                         Conditions

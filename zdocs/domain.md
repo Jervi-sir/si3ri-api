@@ -1,8 +1,8 @@
 ## the domain names
 
-* [6060] gold.jervi.dev
+* [6060] si3ri.com
 
-gold.jervi.dev
+si3ri.com
 
 ---------------------------------------------------
 
@@ -12,11 +12,11 @@ gold.jervi.dev
 
 ### Dzpreneurs
 ---------------------------------------------------
-- sudo nano /etc/nginx/sites-available/gold.jervi.dev
+- sudo nano /etc/nginx/sites-available/si3ri.com
 ```nginx
 server {
     listen 80;
-    server_name gold.jervi.dev;
+    server_name si3ri.com;
     client_body_timeout 300s;
     client_header_timeout 300s;
     send_timeout 300s;
@@ -79,8 +79,8 @@ server {
     }
 }
 ```
-- sudo ln -s /etc/nginx/sites-available/gold.jervi.dev /etc/nginx/sites-enabled/
+- sudo ln -s /etc/nginx/sites-available/si3ri.com /etc/nginx/sites-enabled/
 - sudo nginx -t
 - sudo systemctl restart nginx
-- sudo certbot --nginx -d gold.jervi.dev
-- sudo nano /etc/nginx/sites-available/gold.jervi.dev
+- sudo certbot --nginx -d si3ri.com
+- sudo nano /etc/nginx/sites-available/si3ri.com

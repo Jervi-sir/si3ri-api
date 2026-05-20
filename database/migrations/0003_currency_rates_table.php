@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('currency_rates', function (Blueprint $table) {
             $table->id();
             $table->string('pair'); // e.g., EUR/DZD, USD/DZD
+            $table->smallInteger('source')->default(0)->comment('0: official, 1: parallel (black market)');
             $table->decimal('rate', 14, 4);
             $table->timestamps();
+
+            $table->index(['pair', 'source', 'created_at']);
         });
     }
 

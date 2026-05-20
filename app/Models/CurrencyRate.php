@@ -13,12 +13,14 @@ class CurrencyRate extends Model
     protected $fillable = [
         'pair',
         'rate',
+        'source',
     ];
 
     protected function casts(): array
     {
         return [
             'rate' => 'decimal:4',
+            'source' => 'integer',
         ];
     }
 }

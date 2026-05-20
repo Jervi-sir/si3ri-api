@@ -14,6 +14,7 @@ class Payment extends Model
         'status',
         'payment_method',
         'transaction_id',
+        'receipt_path',
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo

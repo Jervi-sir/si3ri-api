@@ -28,9 +28,10 @@ return new class extends Migration
             $table->foreignId('subscription_id')->nullable()->constrained()->nullOnDelete();
             $table->decimal('amount', 10, 2);
             $table->string('currency')->default('USD');
-            $table->string('status'); // e.g., succeeded, pending, failed
+            $table->string('status')->default('pending'); // e.g., succeeded, pending, failed
             $table->string('payment_method');
             $table->string('transaction_id')->nullable();
+            $table->string('receipt_path')->nullable(); // Screenshot/proof of payment (CCP/BaridiMob)
             $table->timestamps();
         });
     }
@@ -40,6 +41,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('payments');
         Schema::dropIfExists('subscriptions');
     }
 };

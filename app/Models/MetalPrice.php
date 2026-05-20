@@ -11,7 +11,7 @@ class MetalPrice extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type',
+        'metal_id',
         'price',
         'currency',
         'unit',
@@ -22,5 +22,10 @@ class MetalPrice extends Model
         return [
             'price' => 'decimal:4',
         ];
+    }
+
+    public function metal(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Metal::class);
     }
 }

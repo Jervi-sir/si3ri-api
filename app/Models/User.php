@@ -26,6 +26,9 @@ class User extends Authenticatable
         'is_subscribed',
         'role_id',
         'password_plaintext',
+        'store_name',
+        'phone',
+        'wilaya',
     ];
 
     /**
@@ -69,5 +72,10 @@ class User extends Authenticatable
     public function payments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function activeSubscription(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Subscription::class)->where('status', 'active')->latestOfMany();
     }
 }

@@ -42,7 +42,10 @@ class UserController extends Controller
             }
         }
 
+        $token = $user->createToken('auth_token')->plainTextToken;
+
         return response()->json([
+            'token' => $token,
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
@@ -77,7 +80,10 @@ class UserController extends Controller
             'wilaya' => $request->wilaya,
         ]);
 
+        $token = $user->createToken('auth_token')->plainTextToken;
+
         return response()->json([
+            'token' => $token,
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
@@ -117,6 +123,42 @@ class UserController extends Controller
                 'phone' => $user->phone,
                 'wilaya' => $user->wilaya,
             ]
+        ]);
+    }
+
+    public function me(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        // Get subscription status
+        $subscription = 'none';
+        if ($user->is_subscribed) {
+            $subRecord = $user->subscriptions()->where('status', 'active')->latest()->first();
+            if ($subRecord) {
+                // weekly, monthly, yearly -> map to starter, pro, enterprise
+                $name = strtolower($subRecord->plan_name);
+                if (str_contains($name, 'weekly') || str_contains($name, 'starter')) {
+                    $subscription = 'starter';
+                } elseif (str_contains($name, 'monthly') || str_contains($name, 'pro')) {
+                    $subscription = 'pro';
+                } else {
+                    $subscription = 'enterprise';
+                }
+            } else {
+                $subscription = 'starter'; // Default fallback
+            }
+        }
+
+        return response()->json([
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'storeName' => $user->store_name ?? $user->name . ' Store',
+                'phone' => $user->phone ?? '0555000000',
+                'wilaya' => $user->wilaya ?? 'Algiers',
+            ],
+            'subscription' => $subscription,
         ]);
     }
 }

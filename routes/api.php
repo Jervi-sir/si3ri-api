@@ -12,6 +12,7 @@ Route::get('/metals', [DashboardController::class, 'index']);
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/user/update', [UserController::class, 'update']);
+Route::middleware('auth:sanctum')->get('/me', [UserController::class, 'me']);
 
 // Subscription plans & payment submission
 Route::get('/subscriptions/plans', [SubscriptionController::class, 'plans']);

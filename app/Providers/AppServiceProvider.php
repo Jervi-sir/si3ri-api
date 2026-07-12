@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
         $this->configureDefaults();
         Telescope::night();
         if (env('DB_HOST') === '127.0.0.1' || env('DB_HOST') === 'localhost') {
-            URL::forceScheme('https');
+            // URL::forceScheme('https');
         }
     }
 

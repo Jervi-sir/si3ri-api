@@ -10,84 +10,69 @@ class MetalService
 {
     /**
      * Get data for the dashboard.
+     *
+     * Returns the shape consumed by the Inertia dashboard page:
+     * spot prices, currency rates, gold prices keyed by karat, and silver per gram.
      */
     public function getDashboardData(): array
     {
-        $metals = Metal::with(['prices' => function($q) {
+        $metals = Metal::with(['prices' => function ($q) {
             $q->orderBy('created_at', 'desc')->take(30);
-        }])->get();
+        }])->get()->keyBy('code');
 
-        $rates = [];
-        foreach ($metals as $metal) {
-            $prices = $metal->prices;
-            if ($prices->isEmpty()) {
-                continue;
+        $latestPrice = function (?Metal $metal): float {
+            if (! $metal || $metal->prices->isEmpty()) {
+                return 0.0;
             }
 
-            $latestPriceObj = $prices->first();
-            $latestPrice = (float) $latestPriceObj->price;
-            
-            // Calculate change percentage compared to previous price
-            $prevPriceObj = $prices->skip(1)->first();
-            $change = 0.0;
-            if ($prevPriceObj) {
-                $prevPrice = (float) $prevPriceObj->price;
-                if ($prevPrice > 0) {
-                    $change = round((($latestPrice - $prevPrice) / $prevPrice) * 100, 2);
-                }
+            return round((float) $metal->prices->first()->price, 2);
+        };
+
+        $gold24 = $latestPrice($metals->get('gold_24k'));
+        $gold21 = $latestPrice($metals->get('gold_21k'));
+        $gold18Local = $latestPrice($metals->get('gold_18k_local'));
+        $gold18Italian = $latestPrice($metals->get('gold_18k_italian'));
+        $silver = $latestPrice($metals->get('silver'));
+
+        // 19K is not seeded; approximate it by linear interpolation between 18K and 21K.
+        $interpolate = function (float $low, float $high): float {
+            if ($low <= 0 || $high <= 0) {
+                return 0.0;
             }
 
-            // Get last 8 prices (chronological order) for the chart
-            $history = $prices->take(8)->pluck('price')->reverse()->map(fn($p) => (float) $p)->values()->all();
-            $labels = $prices->take(8)->reverse()->map(fn($p) => $p->created_at->format('H:i'))->values()->all();
+            return round($low + (1 / 3) * ($high - $low), 2);
+        };
 
-            // Format buying and selling prices:
-            // Sell price is the spot price, buy price is spot price - 2% spread margin
-            $sellPrice = round($latestPrice, 2);
-            $buyPrice = round($latestPrice * 0.98, 2);
+        $goldDzd = [
+            '24k' => ['raw' => $gold24, 'local' => $gold24, 'italian' => $gold24],
+            '21k' => ['raw' => $gold21, 'local' => $gold21, 'italian' => $gold21],
+            '19k' => [
+                'raw' => $interpolate($gold18Local, $gold21),
+                'local' => $interpolate($gold18Local, $gold21),
+                'italian' => $interpolate($gold18Italian, $gold21),
+            ],
+            '18k' => ['raw' => $gold18Local, 'local' => $gold18Local, 'italian' => $gold18Italian],
+        ];
 
-            // Determine metal type
-            $metalType = 'gold';
-            if (str_contains($metal->code, 'silver')) {
-                $metalType = 'silver';
-            } elseif (str_contains($metal->code, 'platinum') || str_contains($metal->code, 'platine')) {
-                $metalType = 'platinum';
-            }
-
-            // Determine origin
-            $origin = 'global';
-            if (str_contains($metal->code, 'local')) {
-                $origin = 'local';
-            } elseif (str_contains($metal->code, 'italian') || str_contains($metal->code, 'spanish') || str_contains($metal->code, 'imported')) {
-                $origin = 'imported';
-            }
-
-            $rates[] = [
-                'id' => $metal->code,
-                'code' => $metal->code,
-                'karat' => $metal->kara ? $metal->kara . 'K' : ($metal->code === 'silver' ? '925' : '950'),
-                'metalType' => $metalType,
-                'origin' => $origin,
-                'name_en' => $metal->en,
-                'name_fr' => $metal->fr,
-                'name_ar' => $metal->ar,
-                'buyPrice' => $buyPrice,
-                'sellPrice' => $sellPrice,
-                'change' => $change,
-                'history' => $history,
-                'labels' => $labels,
-            ];
-        }
-
-        $usdDzd = CurrencyRate::where('pair', 'USD/DZD')->latest()->first();
-        $eurDzd = CurrencyRate::where('pair', 'EUR/DZD')->latest()->first();
+        // Currency rates from the parallel (black market) source, matching the UI label.
+        $usdDzd = CurrencyRate::where('pair', 'USD/DZD')->where('source', 1)->latest()->first();
+        $eurDzd = CurrencyRate::where('pair', 'EUR/DZD')->where('source', 1)->latest()->first();
 
         return [
-            'rates' => $rates,
-            'currency_rates' => [
+            'spot' => [
+                'gold' => $gold24,
+                'silver' => $silver,
+                'copper' => 0.0,
+                'last_updated' => now()->toDateTimeString(),
+            ],
+            'rates' => [
                 'usd_dzd' => $usdDzd ? (float) $usdDzd->rate : 220.00,
                 'eur_dzd' => $eurDzd ? (float) $eurDzd->rate : 242.00,
-            ]
+            ],
+            'gold_dzd' => $goldDzd,
+            'silver_dzd' => [
+                'gram' => $silver,
+            ],
         ];
     }
 

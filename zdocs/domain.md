@@ -1,6 +1,6 @@
 ## the domain names
 
-* [6060] si3ri.com
+* [6061] si3ri.com
 
 si3ri.com
 
@@ -60,7 +60,7 @@ server {
     }
 
     location / {
-        proxy_pass http://localhost:6060;
+        proxy_pass http://localhost:6061;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

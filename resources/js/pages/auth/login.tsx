@@ -12,14 +12,14 @@ import { register } from '@/routes';
 
 type Props = {
     status?: string;
-    canResetPassword: boolean;
-    canRegister: boolean;
+    canResetPassword?: boolean;
+    canRegister?: boolean;
 };
 
 export default function Login({
     status,
-    canResetPassword,
-    canRegister,
+    canResetPassword = false,
+    canRegister = true,
 }: Props) {
     return (
         <AuthLayout

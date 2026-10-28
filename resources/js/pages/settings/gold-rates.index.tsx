@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { BreadcrumbItem } from '@/types';
+import AppLayout from '@/layouts/app-layout';
 
 interface MetalRateItem {
     id?: number;
@@ -216,7 +217,7 @@ export default function GoldRatesSettings({ initialRates, currencyRate }: Props)
     };
 
     return (
-        <>
+        <AppLayout>
             <Head title="Configuration des Tarifs de l'Or" />
 
             <div className="flex flex-1 flex-col gap-6 p-4 md:p-8 w-full">
@@ -447,7 +448,7 @@ export default function GoldRatesSettings({ initialRates, currencyRate }: Props)
                     </div>
                 </form>
             </div>
-        </>
+        </AppLayout>
     );
 }
 

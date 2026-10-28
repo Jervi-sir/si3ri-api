@@ -20,7 +20,7 @@ export default function Register() {
             <Form
                 // action={AuthenticationController.storeRegister.url()}
                 method="post"
-                resetOnSuccess={['password', 'password_confirmation']}
+                resetOnSuccess={['password']}
                 disableWhileProcessing
                 className="flex flex-col gap-6"
             >
@@ -64,52 +64,28 @@ export default function Register() {
                                 <InputError message={errors.email} />
                             </div>
 
-                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                <div className="grid gap-2">
-                                    <Label htmlFor="password">Mot de passe</Label>
-                                    <div className="relative">
-                                        <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                        <Input
-                                            id="password"
-                                            type="password"
-                                            required
-                                            tabIndex={3}
-                                            autoComplete="new-password"
-                                            name="password"
-                                            placeholder="••••••••"
-                                            className="pl-10"
-                                        />
-                                    </div>
-                                    <InputError message={errors.password} />
-                                </div>
-
-                                <div className="grid gap-2">
-                                    <Label htmlFor="password_confirmation">
-                                        Confirmer
-                                    </Label>
-                                    <div className="relative">
-                                        <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                        <Input
-                                            id="password_confirmation"
-                                            type="password"
-                                            required
-                                            tabIndex={4}
-                                            autoComplete="new-password"
-                                            name="password_confirmation"
-                                            placeholder="••••••••"
-                                            className="pl-10"
-                                        />
-                                    </div>
-                                    <InputError
-                                        message={errors.password_confirmation}
+                            <div className="grid gap-2">
+                                <Label htmlFor="password">Mot de passe</Label>
+                                <div className="relative">
+                                    <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                    <Input
+                                        id="password"
+                                        type="password"
+                                        required
+                                        tabIndex={3}
+                                        autoComplete="new-password"
+                                        name="password"
+                                        placeholder="••••••••"
+                                        className="pl-10"
                                     />
                                 </div>
+                                <InputError message={errors.password} />
                             </div>
 
                             <Button
                                 type="submit"
                                 className="mt-2 h-11 w-full bg-amber-600 font-semibold text-white transition-all duration-200 hover:bg-amber-700"
-                                tabIndex={5}
+                                tabIndex={4}
                                 data-test="register-user-button"
                             >
                                 {processing ? (
@@ -125,7 +101,7 @@ export default function Register() {
                             Vous avez déjà un compte ?{' '}
                             <TextLink
                                 href={login()}
-                                tabIndex={6}
+                                tabIndex={5}
                                 className="font-semibold text-amber-600 hover:text-amber-700 hover:underline"
                             >
                                 Connectez-vous plutôt
